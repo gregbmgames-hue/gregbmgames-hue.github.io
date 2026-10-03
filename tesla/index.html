@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>AutobotHome – Tesla-Anmeldung</title>
+<style>
+  :root { --bg: #f6f7f9; --fg: #1b1f24; --mut: #5f6b7a; --card: #fff; --ln: #e3e6ea; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #111418; --fg: #e8ebef; --mut: #9aa5b1; --card: #1a1f25; --ln: #2a3139; } }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.6 system-ui, sans-serif; }
+  main { max-width: 640px; margin: 0 auto; padding: 32px 16px; }
+  section { background: var(--card); border: 1px solid var(--ln); border-radius: 10px; padding: 16px; }
+  textarea { width: 100%; box-sizing: border-box; min-height: 90px; font: 13px monospace; padding: 8px; border: 1px solid var(--ln); border-radius: 6px; background: var(--bg); color: var(--fg); }
+  button { margin-top: 10px; padding: 8px 14px; border: 0; border-radius: 6px; background: #2563eb; color: #fff; cursor: pointer; }
+  .mut { color: var(--mut); font-size: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Tesla-Anmeldung</h1>
+  <section>
+    <p id="text">Diesen Code kopieren und in AutobotHome unter <b>/tesla</b>, Schritt 5, einfügen:</p>
+    <textarea id="code" readonly></textarea>
+    <button id="kopieren">Code kopieren</button> <span id="ok" class="mut"></span>
+  </section>
+  <p class="mut">Diese Seite ist statisch: Der Code wird nur hier angezeigt und an niemanden gesendet. Er ist wenige Minuten gültig und nur einmal verwendbar.</p>
+</main>
+<script>
+  var q = new URLSearchParams(location.search);
+  var code = q.get('code');
+  var feld = document.getElementById('code');
+  if (code) {
+    feld.value = code;
+  } else {
+    document.getElementById('text').textContent = 'Kein Code erhalten' + (q.get('error') ? ' (' + q.get('error') + ')' : '') + '. Bitte die Anmeldung in AutobotHome erneut starten.';
+  }
+  document.getElementById('kopieren').onclick = function () {
+    feld.select();
+    var fertig = function () { document.getElementById('ok').textContent = 'kopiert'; };
+    if (navigator.clipboard) { navigator.clipboard.writeText(feld.value).then(fertig, function () { document.execCommand('copy'); fertig(); }); }
+    else { document.execCommand('copy'); fertig(); }
+  };
+</script>
+</body>
+</html>
